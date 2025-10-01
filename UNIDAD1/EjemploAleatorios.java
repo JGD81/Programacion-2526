@@ -23,3 +23,5 @@ public class EjemploAleatorios {
         System.out.println("Estas en " + nivelEducativo);
     }
 }
+
+// Prueba
