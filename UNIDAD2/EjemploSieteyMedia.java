@@ -16,18 +16,64 @@ public class EjemploSieteyMedia {
 
         Scanner teclado = new Scanner(System.in);
 
-        double sumaCartasJugador = 0;
-        double sumaCartasBanca = 0;
-        double numAleatorio = (Math.random() * 10) + 1;
-        if (numAleatorio >= 6 && numAleatorio <= 10) {
-            numAleatorio = 0.5;
-        }
-        boolean CartasJugador = false;
+        float carta = 0;
+        float sumaJugador = 0;
+        float sumaBanca = 0;
+        String quiereContinuar ="si";
 
-        while (numAleatorio <= 5) {
-            if (numAleatorio >= 0 && numAleatorio <= 5) {
-                sumaCartasBanca = sumaCartasBanca + numAleatorio;
+        while (quiereContinuar.equalsIgnoreCase("si") && sumaJugador < 7.5f){
+            carta = (int)(Math.random()*10 + 1);
+            //Es media si  sale un 8 un 9 y un 10
+            if (carta > 7){
+                carta = 0.5f;
+            }
+            //Sumamos la carta que hemos sacado al conjunto de cartas
+            sumaJugador = sumaJugador + carta;
+
+            //Le preguntamos al jugador si quiere seguir
+            System.out.println("Ha salido un " + carta + " en total llevas " + sumaJugador);
+            if (sumaJugador > 7.5f){
+                System.out.println("Te has pasao bacalao, me quedo con tu pasta");
+            }else{
+                System.out.print("Quieres seguir jugando (Si/No)?");
+                quiereContinuar = teclado.next();
             }
         }
+
+        //La banca sólo empieza si el jugador no se ha pasado
+        if (sumaJugador <= 7.5f){
+             while (sumaBanca < sumaJugador  && sumaBanca < 7.5f){
+            //Es media si  sale un 8 un 9 y un 10
+            if (carta > 7){
+                carta = 0.5f;
+            }
+            //Sumamos la carta que hemos sacado al conjunto de cartas
+            sumaBanca = sumaBanca + carta;
+
+            //Le preguntamos al jugador si quiere seguir
+            System.out.println("Ha salido un " + carta + " en total la banca lleva " + sumaBanca);
+           
+        }
+
+         if (sumaBanca > 7.5f){
+                System.out.println("La banca ha perdido, espera a final de mes");
+        }else{
+            //La banca no se ha pasado
+            //Si el jugador tampoco se ha pasado
+            if(sumaJugador <= 7.5f){
+                if (sumaJugador>sumaBanca){
+                    System.out.println("Ha ganado el jugador!!");
+                    if (sumaJugador == 7.5f){
+                        System.out.println("Felicidades por sacar 7.5, te pagamos el doble");
+                    }
+                }else{
+                    System.out.println("Ha ganado la banca");
+                }
+            }
+        }
+        teclado.close();
     }
 }
+}  
+
+
