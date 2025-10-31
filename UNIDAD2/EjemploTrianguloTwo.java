@@ -2,7 +2,7 @@ package UNIDAD2;
 
 import java.util.Scanner;
 
-public class EjemploTriangulo {
+public class EjemploTrianguloTwo {
     public static void main(String[] args) {
         /*
          * El programa leera la base y dibujará un triangulo de ese tamaño
@@ -19,9 +19,15 @@ public class EjemploTriangulo {
          * Dibujamos cada nivel del triángulo, en total hay baseTriangulo veces niveles
          */
 
-         for (int i = 1; i < baseTriangulo;i++){
-            //En cada nivel tengo que dibujar i+1 asteriscos
-            for(int j=0;j<i;j++){
+         for (int i = 0; i < baseTriangulo;i++){
+            
+            //Dibujamos los espacios en blanco para centrar el triángulo
+            for(int x=0;x<baseTriangulo-(i-1);x++){
+                System.out.print(" ");
+            }
+            
+            //En cada nivel tengo que dibujar 1+2+i asteriscos
+            for(int j=0;j< 1+2*i;j++){
                 System.out.print("*");
             }
             //Después de dibujar un nivel, pasamos a la siguiente línea
