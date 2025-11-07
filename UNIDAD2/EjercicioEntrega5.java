@@ -12,7 +12,6 @@ public class EjercicioEntrega5 {
         //Constante para meta
         final int META = 30;
 
-
         //Posición de cada caracol
         int posCaracol1 = 0;
         int posCaracol2 = 0;
@@ -28,16 +27,13 @@ public class EjercicioEntrega5 {
         int tiradaAnteriorC2 = -1;
         int tiradaAnteriorC3 = -1;
 
-
         //Comprobar si está dormido
         boolean dormCaracol1 = false;
         boolean dormCaracol2 = false;
         boolean dormCaracol3 = false;
 
-
         //Comprobar si ha llegado a la meta
         boolean llegadaMeta = false;
-
 
         //Suma de tiradas
         int sumaTirada = 0;
@@ -125,9 +121,7 @@ public class EjercicioEntrega5 {
                 }
             }
 
-
             System.out.println("[META]");
-
 
             for (int i = 0; i < META; i++){
                 if (i == posCaracol2){
@@ -137,9 +131,7 @@ public class EjercicioEntrega5 {
                 }
             }
 
-
             System.out.println("[META]");
-
 
             for (int i = 0; i < META; i++){
                 if (i == posCaracol3){
