@@ -21,17 +21,30 @@ public class Buscaminas {
         System.out.println("En qué posiciónes quieres comprobar (x y)");
         int posx = teclado.nextInt();
         int posy = teclado.nextInt();
+        //Variable para contar las bombas
+        int cantBombas = 0;
 
         //Si hay una bomba en esa posición y se acabó, haber usado un robot
         //o el perro, no el dedo
         if(mapaBombas[posy][posx] == 1){
             System.out.println("BOOMBA");
         }else{
+            /*
+             * Recorremos con la i las posiciones anteriores y posteriores a la introducida
+             * y con la j las verticales anteriores y posteriores
+             */
             for(int i=posx-1; i<=posx+1;i++){
-                for(int j=posy-1;i<=posy-1;j++){
-                    
+                for(int j=posy-1;j<=posy-1;j++){
+                    //Comprobamos si las coordenadas están dentro del mapa
+                    if (i>=0 && i<=2 && j>= 0 && j <= 2)
+                    //Si en las coordenadas i j hay 1, implica que hay
+                    //una bomba. Incrementamos la cantidad de bombas
+                    if (mapaBombas[j][i]==1){
+                        cantBombas++;
+                    } 
                 }
             }
+            System.out.println("Cerca de esa posición (" + posx + "," + posy + ") hay " + cantBombas + "bombas");
         }
 
         teclado.close();
