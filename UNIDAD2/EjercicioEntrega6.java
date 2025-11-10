@@ -135,5 +135,7 @@ public class EjercicioEntrega6 {
             }else{
                 System.out.println("No existen series documentales. No se puede calcular la media");
             }
+
+            
     }
 }
