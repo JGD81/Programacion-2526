@@ -16,6 +16,8 @@ public class EjercicioEntrega6 {
         System.out.println("De cuántas horas quieres que sea tú maratón perfecto?");
         int horasMaraton = teclado.nextInt();
 
+        teclado.nextLine();
+
         //Crear arrays en el que cada índice será una serie completa
         //El tamaño del array dependerá del número de series introducidas
         String nombres[] = new String[numSeries];
@@ -46,6 +48,13 @@ public class EjercicioEntrega6 {
         double mediaTerror = 0;
         double mediaDocumental = 0;
 
+        //Constante con las horas por temporada de cada serie
+        final int HORAS_TEMPORADA = 8;
+        //Variable para calcular las horas totales y el maratón perfecto
+        int horasSerie;
+        //Variable para controlar si no se encuentran series que cumplan el maratón perfecto
+        boolean serieMaratonEncontrada = false;
+
 
         //Recorremos con for todos los datos de las series
         for (int i=0;i<numSeries;i++){
@@ -59,7 +68,20 @@ public class EjercicioEntrega6 {
             puntuaciones[i] = teclado.nextDouble();
             System.out.println("Introduce el año de la serie: ");
             anios[i] = teclado.nextInt();
+            System.out.println("-------------------------");
             
+            //Comprobar qué serie cumple el maratón perfecto
+            horasSerie = temporadas[i] * HORAS_TEMPORADA;
+            if (horasSerie == horasMaraton){
+                System.out.println("Se ha encontrado una serie para un maratón perfecto: " + nombres[i]);
+                serieMaratonEncontrada = true;
+            }
+
+            //Encontrar joyas ocultas
+            if(temporadas[i] < 3 && puntuaciones[i] > 8){
+                System.out.println("Se ha encontrado una joya oculta!. La serie se llama: " + nombres[i] + ". La serie tiene " + temporadas[i] + " temporadas " + "y una puntuación de " + puntuaciones[i]);
+            }
+
             //Guardamos, mientras recorremos el bucle, la serie que vaya
             //teniendo el mayor número de temporadas
             if (temporadas[i] > maxTemporadas){
@@ -136,6 +158,8 @@ public class EjercicioEntrega6 {
                 System.out.println("No existen series documentales. No se puede calcular la media");
             }
 
-            
+            if (!serieMaratonEncontrada){
+                System.out.println("No se han encontrado series que cumplan el maratón perfecto");
+            }        
     }
 }
