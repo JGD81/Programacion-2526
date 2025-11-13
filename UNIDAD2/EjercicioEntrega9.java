@@ -36,7 +36,7 @@ public class EjercicioEntrega9 {
             int filaUsuario = teclado.nextInt();
             System.out.println("Introduce la columna (del 1 al 8): ");
             int columnaUsuario = teclado.nextInt();
-            //Como los bucles en java empiezan en el índice 0, se le resta 1 para que empiece en fila y columna 1
+            //Como los bucles en java empiezan en el índice 0, se le resta 1 para ajustarlos
             filaUsuario = filaUsuario -1;
             columnaUsuario = columnaUsuario -1;
             //En el caso de que el usuario introduzca valores fuera de rango, vuelve a pedir las coordenadas
@@ -53,9 +53,11 @@ public class EjercicioEntrega9 {
             if (tablero[filaUsuario][columnaUsuario] == 1){
                 System.out.println("Tocado!");
                 casillasTotalesConBarcos--;
+                //Se marca para hacerle saber al usuario que ya realizó ese disparo
                 tablero[filaUsuario][columnaUsuario] = -1;
             }else if(tablero[filaUsuario][columnaUsuario] == 0){
                 System.out.println("Agua");
+                //Se marca para hacerle saber al usuario que ya realizó ese disparo
                 tablero[filaUsuario][columnaUsuario] = 2;
             }else{
                 System.out.println("Ya has disparado aquí, prueba otra casilla");
@@ -64,7 +66,6 @@ public class EjercicioEntrega9 {
 
         System.out.println("Felicidades! Has eliminado todos los barcos del tablero!");
        
-        
         //Bucle para recorrer el tablero y comprobar que el número de barcos es correcto
         for(int fila = 0; fila < 8; fila++){
             for(int columna = 0; columna < 8; columna++){
