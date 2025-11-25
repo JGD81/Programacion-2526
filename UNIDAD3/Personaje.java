@@ -1,7 +1,17 @@
 package UNIDAD3;
 
+import java.util.ArrayList;
+
 // Declaración de la clase Personaje
 public class Personaje {
+    /**************/
+    /*CONSTANTES */
+    /**************/
+    public static final int MAX_ARMAS = 3;
+    
+    /**************/
+    /*VARIABLES MIEMBROS */
+    /**************/
 
     // Atributos de la clase (encapsulación)
     // Son privados para restringir el acceso directo desde fuera de la clase.
@@ -14,15 +24,23 @@ public class Personaje {
     // Modificador de acceso 'protected': Permite el acceso a esta variable
     // desde la misma clase, clases del mismo paquete y subclases (herencia).
     protected int creditos; // Variable de instancia
-
     // Constructor por defecto o sin argumentos.
     // Se invoca cuando se crea un objeto sin especificar valores iniciales.
     // Inicializa los atributos con valores predeterminados.
+    
+    private ArrayList<Arma> listaArmas;
+    
+    /**************/
+    /*CONSTRUCTORES */
+    /**************/
+    
     public Personaje() {
         this.nombre = "Generado"; // 'this' se refiere a la instancia actual del objeto.
         this.vida = (int) (Math.random() * 100) + 1; // Asigna una vida aleatoria.
         this.armadura = 100;
         this.creditos = 30;
+
+
     }
 
     // Constructor con argumentos.
@@ -36,6 +54,15 @@ public class Personaje {
         this.armadura = armadura;
         this.creditos = creditos;
 
+    }
+
+    /**************/
+    /*FUNCIONES */
+    /**************/
+
+    public int cargarArma(Arma arma){
+        return 0;
+        
     }
 
     // Métodos "getter" (accesores) para obtener el valor de los atributos privados.
@@ -64,6 +91,7 @@ public class Personaje {
     public int getCreditos() {
         return this.creditos;
     }
+
 
     // Sobrescritura del método toString() de la clase Object.
     // Proporciona una representación en cadena del objeto Personaje,
