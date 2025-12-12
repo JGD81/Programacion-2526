@@ -2,20 +2,23 @@ package UNIDAD3;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 public class Gremio {
 
-    String nombre;
-    int reputacion;
-    Personaje lider;
-    HashMap<String, String> listaQuests;
-    ArrayList<Personaje> miembros;
+    private String nombre;
+    private int reputacion;
+    private Personaje lider;
+    private HashMap<String, Quest> listaQuests;
+    private ArrayList<Personaje> miembros;
 
     public Gremio() {
         this.nombre = "Gremio one";
         this.reputacion = 0;
         this.lider = null;
-        this.listaQuests = new HashMap<String, String>();
+        this.listaQuests = new HashMap<String, Quest>();
         this.miembros = new ArrayList<Personaje>();
 
     }
@@ -24,7 +27,7 @@ public class Gremio {
         this.nombre = nombre;
         this.reputacion = reputacion;
         this.lider = lider;
-        this.listaQuests = new HashMap<String, String>();
+        this.listaQuests = new HashMap<String, Quest>();
         this.miembros = new ArrayList<Personaje>();
     }
 
@@ -33,8 +36,13 @@ public class Gremio {
         this.reputacion = reputacion;
         this.lider = lider;
         this.miembros = miembros;
-        this.listaQuests = new HashMap<String, String>();
+        this.listaQuests = new HashMap<String, Quest>();
         this.miembros = new ArrayList<Personaje>();
+    }
+
+    public long numMiembrosClase(int clase) {
+        // Con count me devuelve la cantidad de elmentos que cumplen las condiciones
+        return this.miembros.stream().filter(p -> p.getClase() == clase).count();
     }
 
     /**
@@ -63,6 +71,38 @@ public class Gremio {
 
     }
 
+    public ArrayList<Personaje> muyArmadosStream(int clase) {
+
+        List<Personaje> resultado = this.miembros.stream()
+                .filter(p -> p.getClase() == clase)
+                .filter(p -> p.getListaArmas().size() > 2)
+                .collect(Collectors.toList());
+
+        return resultado.isEmpty() ? null : new ArrayList<Personaje>(resultado);
+
+    }
+
+    /**
+     * Funcion que devuelve la lista de los personajes del gremio que tienen mas
+     * dinero
+     * del que reciben
+     * 
+     * @param dinero de tipo int
+     * @return Un ArrayList<String> con los nombres que cumplan la condicion o null
+     *         si no hay
+     */
+    public ArrayList<String> getNombrePersonajesDineroArrayList(int creditos) {
+
+        List<String> resultado = this.miembros.stream()// Con Stream creamos una agregacion sobre los datos
+                .filter(p -> p.getCreditos() > creditos)// Filter sirve para poner condiciones y eliminar los que no las
+                                                        // cumplan
+                .map(p -> p.getNombre())// map sirve para mostrar solo los datos que queramos del objeto
+                .collect(Collectors.toList());
+
+        return resultado.isEmpty() ? null : new ArrayList<String>(resultado);
+
+    }
+
     public Personaje getLider() {
         return lider;
     }
@@ -75,7 +115,7 @@ public class Gremio {
         return reputacion;
     }
 
-    public HashMap<String, String> getListaQuests() {
+    public HashMap<String, Quest> getListaQuests() {
         return listaQuests;
     }
 
@@ -91,7 +131,7 @@ public class Gremio {
         this.reputacion = reputacion;
     }
 
-    public void setListaQuests(HashMap<String, String> listaQuests) {
+    public void setListaQuests(HashMap<String, Quest> listaQuests) {
         this.listaQuests = listaQuests;
     }
 
