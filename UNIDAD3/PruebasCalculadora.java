@@ -26,6 +26,7 @@ public class PruebasCalculadora {
 
         System.out.println("La suma de de los elementos del array es: " + Utilidades.suma(numeros));
 
+        System.out.println("La suma de los 4 primeros es ");
     }
 
 }

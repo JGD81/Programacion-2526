@@ -103,6 +103,7 @@ public class Gremio {
 
     }
 
+
     public Personaje getLider() {
         return lider;
     }

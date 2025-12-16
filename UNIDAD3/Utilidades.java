@@ -43,4 +43,33 @@ public class Utilidades {
         return suma;
 
     }
+    /**
+     * Devuelve la suma desde 1 hasta el número que recibe
+     * Función recursiva, en cada caso se puede utilizar la misma
+     * función con un tamaño menor, es decir, para suma(5) es igual
+     * a suma de (4) + 5, para suma(num) es igual a suma(num-1)+num
+     * El caso base es cuando directamente se devuelve un valor, en este  caso
+     * si recibimos 0 o 1
+     * @param num
+     * @return
+     */
+    public static int sumaFactorial (int num){
+        
+        if (num == 1) return 1;
+        if (num == 0) return 0;
+
+        return sumaFactorial(num-1) + num;
+    }
+
+    public static long factorialPares(int num){
+
+        if (num == 0) return 1;
+        if(num==1) return 0;
+        if(num%2!=0) num=num-1;
+
+        return num*factorialPares(num-2);
+    }
+
+    // TODO SUBIRNOTA
+    /* Función recursiva que calvule el máximo de un array */
 }
