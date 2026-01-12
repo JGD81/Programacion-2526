@@ -1,10 +1,40 @@
 package UNIDAD3.ExamenCorregido;
 
+
+import java.util.Random;
+
+/**
+ * Ciclista.java (1.5 puntos)
+ * 
+ * Está compuesto por los siguientes atributos miembro, los cuales el alumno
+ * deberá seleccionar un tipo adecuado al dato:
+ * Identificador, número
+ * nombre
+ * edad
+ * modeloBici
+ * Peso
+ * posición
+ * especialidad (montaña, contrareloj, todoterreno)
+ * 
+ * Se deberán crear todas las variables privadas, y todas deberán de tener sus
+ * métodos de acceso get y set.
+ * 
+ * Tendrá un constructor vacío que generará los valores numéricos aleatoriamente
+ * y pondrá a “” las cadenas de texto y otro constructor que recibirá todos los
+ * parámetros y se los asignará a los atributos de la clase.
+ * 
+ */
+
 public class Ciclista {
-    
-    public final int ESP_ESMONTANA = 1;
+
+    /******************************************************************
+     * VARIABLES MIEMBRO
+     ******************************************************************/
+
+    public final int ESP_MONTANA = 1;
     public final int ESP_CONTRARELOJ = 2;
-    public final int ESP_TODOTERRENO = 3;
+    public final int ESP_TODOTERRENO = 0;
+
     private int id;
     private String nombre;
     private int edad;
@@ -13,6 +43,41 @@ public class Ciclista {
     private int posicion;
     private int especialidad;
 
+    /*************************************************************************
+     * CONSTRUCTORES
+     *************************************************************************/
+
+    public Ciclista() {
+
+        this.id = (int) (Math.random() * 100) + 1;
+        this.nombre = "";
+        this.edad = (int) (Math.random() * 90) + 18;
+        this.modeloBici = "";
+        this.peso = Math.random() * 40 + 40;
+        this.posicion = (int) (Math.random() * 100) + 1;
+        this.especialidad = (int) (Math.random() * 3);
+    }
+
+    public Ciclista(int id,
+            String nombre,
+            int edad,
+            String modeloBici,
+            double peso,
+            int posicion,
+            int especialidad) {
+
+        this.id = id;
+        this.nombre = nombre;
+        this.edad = edad;
+        this.modeloBici = modeloBici;
+        this.peso = peso;
+        this.posicion = posicion;
+        this.especialidad = especialidad;
+    }
+
+    /*********************************************************************************************
+     * GETTERS Y SETTER
+     ************************************************************************************************/
     public int getId() {
         return id;
     }
@@ -24,6 +89,7 @@ public class Ciclista {
     public String getNombre() {
         return nombre;
     }
+
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
@@ -68,32 +134,18 @@ public class Ciclista {
         this.especialidad = especialidad;
     }
 
-    public Ciclista(){
-        this.id = (int) (Math.random()*100)+1;
-        this.nombre = "";
-        this.edad = (int) (Math.random()*90)+18;
-        this.modeloBici = "";
-        this.peso = Math.random()*40+40;
-        this.posicion = (int) (Math.random()*100)+1;
-        this.especialidad = (int) (Math.random() * 3);
-    }
-
-    public Ciclista(int id, String nombre, int edad, String modeloBici, double peso, int posicion, int especialidad){
-        this.id = id;
-        this.nombre = nombre;
-        this.edad = edad;
-        this.modeloBici = modeloBici;
-        this.peso = peso;
-        this.posicion = posicion;
-        this.especialidad = especialidad;
-    }
-
     @Override
-    public String toString(){
-        return "/***************************\n"
-        + "Id: " + this.id + "\n"
-        + "nombre: " + this.nombre + "\n"
-        
+    public String toString() {
+
+        return "CICLISTA\n*******************************\n"
+                + "Id: " + this.id + "\n"
+                + "nombre: " + this.nombre + "\n"
+                + "modeloBici: " + this.modeloBici + "\n"
+                + "peso: " + this.peso + "\n"
+                + "posicion: " + this.posicion + "\n"
+                + "especialidad: " + this.especialidad + "\n"
+                + "*****************************";
+
     }
 
 }
