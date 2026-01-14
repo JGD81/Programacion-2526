@@ -170,9 +170,4 @@ public class Instrumento {
         + "Rareza: " + rareza + "\n"
         + "En uso (true:si/false:no): " + enUso + "\n";
     }
-
-
-
-
-
 }
