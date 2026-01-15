@@ -265,6 +265,4 @@ public class Artista {
     + "Número de instrumentos: " + instrumentos.size();
 
   }
-
-
 }
