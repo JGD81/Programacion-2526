@@ -8,10 +8,13 @@ public class Destino {
     private boolean requiereVisado;
     private int temporadaIdeal;
     private String atraccionesTuristicas;
+    // Constantes para evitar usar números mágicos
     public static final int TEMPORADA_BAJA = 1;
     public static final int TEMPORADA_MEDIA = 2;
     public static final int TEMPORADA_ALTA = 3;
-
+    // Constructor vacío
+    // Genera valores aleatorios para idDestino, precioMedio y temporadaIdeal
+    // El resto de campos se inicializan con valores por defecto
     public Destino(){
         this.idDestino = (int) (Math.random()*1000) + 1;
         this.nombre = "";
@@ -21,17 +24,20 @@ public class Destino {
         this.temporadaIdeal = (int) (Math.random()*3) +1;
         this.atraccionesTuristicas = "";
     }
-
+    // Constructor completo
+    // El idDestino se genera automáticamente
+    // La temporadaIdeal se asigna usando el setter para reutilizar la validación
     public Destino(String nombre, float precioMedio, String tipoDestino, boolean requiereVisado, int temporadaIdeal, String atraccionesTuristicas){
         this.idDestino = (int) (Math.random()*1000) + 1;
         this.nombre = nombre;
         this.precioMedio = precioMedio;
         this.tipoDestino = tipoDestino;
         this.requiereVisado = requiereVisado;
+        // Se usa el setter para asegurar que la temporada esté dentro de los valores válidos
         this.setTemporadaIdeal(temporadaIdeal);
         this.atraccionesTuristicas = atraccionesTuristicas;
     }
-
+    //Setters y getters
     public int getIdDestino() {
         return idDestino;
     }
@@ -74,7 +80,7 @@ public class Destino {
     public int getTemporadaIdeal() {
         return temporadaIdeal;
     }
-
+    // Setter con validación para evitar valores incorrectos de temporada
     public void setTemporadaIdeal(int temporadaIdeal) {
         if(temporadaIdeal >=1 && temporadaIdeal <=3){
             this.temporadaIdeal = temporadaIdeal;
