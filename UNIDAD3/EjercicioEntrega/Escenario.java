@@ -105,7 +105,7 @@ public class Escenario {
     public boolean bajarDelEscenario(String nombreArtista){
         //removeIf recorre la lista y elimina aquellos que cumplan sue su nombre artístico coincida
         //devuelve true si se ha eliminadoalgún elemento, false si no se ha eliminado ninguno
-        return artistas.removeIf(a -> a.getNombreArtistico().equals(nombreArtista));  
+        return artistas.removeIf(a -> a.getNombreArtistico().equalsIgnoreCase(nombreArtista));  
     }
 
    /*
@@ -145,7 +145,7 @@ public class Escenario {
     El método calcularEspectacularidad:
     - Suma el poder escénico de todos los artistas
     - Si efectosEspeciales == true, multiplica el resultado por 1.5
-    - Devuelve el valor (castedo a int)
+    - Devuelve el valor (casteado a int)
     */
     public int calcularEspectacularidad(){
         //Guardamos en la variable totalPoder la suma total de poder escénico de todos los artistas
