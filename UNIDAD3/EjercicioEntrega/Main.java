@@ -135,18 +135,17 @@ public class Main {
         
         //MÉTODO: Bajar del escenario por el nombre del artista
         System.out.println("***Pruebas bajar del escenario***");
-        esc2.bajarDelEscenario("el fary");
+        System.out.println("Puede subir al escenario?: " + esc2.bajarDelEscenario("el fary"));
+        ;
         //Comprobamos el estado del escenario
         System.out.println("===Escenario 2:===\n" + esc2);
 
         //MÉTODO: Obtener artistas por género
         /*
-        El método obtenerGenerosEnEscenario:
-        - Recorre todos los artistas del escenario
-        - Devuelve un HashSet con los géneros musicales presentes (sin repetir)
+        Comprueba los artistas que están en el escenario con el género introducido
         */
        //Volvemos a subir al escenario al art2
-       System.out.println("***Pruebas subir al escenario***");
+       System.out.println("***Pruebas obtener artistas por género***");
        esc2.subirAlEscenario(art2);
        //Comprobamos los géneros de los artistas en el escenario por el género introducido
        System.out.println(esc2.obtenerArtistaPorGenero(Artista.DEATH_METAL_COSMICO)); 
