@@ -1,9 +1,12 @@
+//Este archivo aparece en otra carpeta, porque pertenece al modelo de
+//datos, no al programa principal
 package com.unidad4.model;
 
 //Objeto que envía consultas SQL a la base de datos
 import java.sql.Statement;
 //Representa la conexión abierta con la base de datos
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 //Contiene los resultados de una consulta SELECT
 import java.sql.ResultSet;
 //Db es la clase que se encarga de conectar la BD
@@ -59,6 +62,50 @@ public class PeliculasDAO {
         }
         // Devuelve los datos al programa que llamó al método
         return rs;
+    }
+
+    // Public: puede usarse fuera del DAO
+    // Resulset: Devolverá los resultados de la BD
+    // int clasificacion: recibe un valor para filtrar las películas
+    public ResultSet getPeliculasClasificacion(int clasificacion) {
+        // Inicializamos rs en null porque todavía no hay resultado
+        // y si algo falla, se devuelve null
+
+        ResultSet rs = null;
+
+        try {
+
+            // Consulta SQL con parámetro. Mediante ?, hacemos el parámetro
+            // dinámico y evitamos inyección SQL, siendo más seguro y permitiendo
+            // reutilizar la consulta
+            String query = "select * from pelicula where clasificacion = ?";
+            // A diferencia con Statement, PrepareStatement es SQL con parámetros
+            // y más seguro. Permite:
+            // - Enviar consultas SQL a la base de datos
+            // - Usar parámetros dinámicos (?)
+            // - Evitar inyección SQL
+            // - Mejorar el rendimiento
+            // Proviene de private Connection con, y se inicializa en el
+            // constructor this.com = DB.conectar();
+            // prepareStatement le dice a la base de datos "Prepárate para
+            // ejecutar esta consulta SQL (String query = "select * from
+            // pelicula where clasificacion ?""
+            PreparedStatement stmt = this.con.prepareStatement(query);
+            // Asigna un valor real al símbolo ?
+            // -Inserta un número entero en ?
+            // -1 indica la posición del = en la consulta (número de ?)
+            // clasificacion es el valor que sustituirá a ?
+            stmt.setInt(1, clasificacion);
+            // Ejecutamos y guardamos los datos en un resultset
+            rs = stmt.executeQuery();
+
+        } catch (Exception e) {
+            System.out.println("Hubo un problema con la BD");
+            e.printStackTrace();
+        }
+
+        return rs;
+
     }
 
 }
