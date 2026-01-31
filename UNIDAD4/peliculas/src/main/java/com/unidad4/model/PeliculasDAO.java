@@ -4,6 +4,8 @@ package com.unidad4.model;
 
 //Objeto que envía consultas SQL a la base de datos
 import java.sql.Statement;
+import java.util.HashMap;
+import java.util.Map;
 //Representa la conexión abierta con la base de datos
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -105,7 +107,133 @@ public class PeliculasDAO {
         }
 
         return rs;
+    }
 
+    // En el siguiente método, se introducen los siguientes parámetros:
+    // - pagina: Qué página quieres ver
+    // - numElementos: Cuántos registros por página
+    // - orden: Columna por la que ordenar
+    // - sentidoorden: ascendente o descendente
+    public ResultSet getPeliculas(int pagina, int numElementos, String orden, int sentidoOrden) {
+
+        // Inicializamos rs en null porque todavía no hay resultado
+        // y si algo falla, se devuelve null
+        ResultSet rs = null;
+
+        try {
+            // Le dice a MySQL desde qué fila empezar
+            // Comienza en la página introducida y se muestran un número determinado de
+            // elementos
+            int offset = (pagina - 1) * numElementos;
+
+            // Se crea la consulta básica y, a partir de aquí, se va modificando:
+            // orden, limit y offset
+            String query = "select * from pelicula";
+
+            // Para que no de errores al ordenar (el usuario no quiere ordenar)
+            // se evitan errores si orden es null
+            if (orden != null) {
+                // Se le añade a la consulta ORDER BY
+                query += " order by " + orden;
+                if (sentidoOrden == Db.ORDEN_DESC)
+                    // Si el orden es descentente
+                    // sino, será ascendente por defecto
+                    query += " desc ";
+            }
+
+            // Añadimos la paginación
+            // - Limita el número de resultados y desde donde se empieza
+            query += " limit " + numElementos + " offset " + offset;
+
+            // Se crea la sentencia:
+            // createStatement() - Se crea el "mensajero"
+            // Statement - Es quien manda el SQL a la BD
+            // Sin Statement no puedes ejecutar SQL
+            Statement stm = this.con.createStatement();
+
+            // Ejecutamos la consluta y guardamos los resultados en un
+            // resulset
+            rs = stm.executeQuery(query);
+
+        } catch (Exception e) {
+            System.out.println("Hubo un problema con la BD");
+            e.printStackTrace();
+        }
+
+        return rs;
+    }
+
+    // Método que modifica una película en la BD. Sólo cambia los campos que
+    // se le pasen y devuelve cuántas filas se modificaron
+    public int modificarPelicula(int id, HashMap<String, String> campos) {
+
+        // Por defecto: -1 (error), 1 (se modificó), 0 (no se encontró la película)
+        int columnasModificadas = -1;
+
+        try {
+
+            // Query base para hacer modificaciones en SQL
+            // UPDATE: Modifica la tabla
+            // SET: Qué columnas cambian
+            String query = "update pelicula set ";
+
+            // Sirve para no poner coma antes del primer campo
+            boolean primerCampo = true;
+
+            // La forma adecuada de recorrer este HashMap es con entrySet,
+            // ya que lo recorre devolviendo clave + valor juntos
+            // MapEntry es un objeto que contiene clave y valor
+            // Significado del for: Para cada clave-valor dentro del HashMap campos
+            for (Map.Entry<String, String> campo : campos.entrySet()) {
+                // Si es el primer campo, no pongo coma y marco que sl siguiente ya
+                // no será el primero y sí que se pone
+                if (primerCampo) {
+                    primerCampo = false;
+                } else {
+                    query += ",";
+                }
+                // Vamos construyendo la query con cada iteración
+                // titulo=?, duracion=?,...
+                query += campo.getKey() + "=?";
+            }
+
+            // Una vez construída dinámicamente la Query con los campos,
+            // añadimos lo siguiente para modificar SOLO esa película
+            // (si no se añade, se modifican TODAS)
+            query += " where id = ?";
+            // Preparamos la consulta
+            PreparedStatement stmt = con.prepareStatement(query);
+
+            // Ajustamos la posición el el prepareStatement (empieza en 1, no 0)
+            int posicion = 1;
+            // Mediante el siguiente for, vamos a ir añadiendo los valores a ?
+            for (Map.Entry<String, String> campo : campos.entrySet()) {
+
+                // Si el campo es texto (casos de titulo y sinopsis)
+                if (campo.getKey().equals("titulo") || campo.getKey().equals("sinopsis")) {
+                    // Se utiliza la posición y el valor para texto
+                    stmt.setString(posicion, campo.getValue());
+                } else {
+                    // Se utiliza la posición y el valor para entero
+                    // Se usa Integer.valueOF porque el HashMap guarda todo como
+                    // String (hay que cambiar el tipo a entero)
+                    stmt.setInt(posicion, Integer.valueOf(campo.getValue()));
+                }
+
+                // Pasamos de posición
+                posicion++;
+            }
+            // Asignamos al ? del WERE el id
+            stmt.setInt(posicion, id);
+            // Ejecutamos la consulta
+            columnasModificadas = stmt.executeUpdate();
+
+        } catch (Exception e) {
+            System.out.println("Hubo un problema con la BD");
+            e.printStackTrace();
+        }
+
+        return columnasModificadas;
     }
 
 }
