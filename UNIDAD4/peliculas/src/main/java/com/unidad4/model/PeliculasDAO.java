@@ -236,4 +236,71 @@ public class PeliculasDAO {
         return columnasModificadas;
     }
 
+    // Método para insertar películas
+    // Parámetros - datos de la película.
+    // Aquí NO se pasa SQL, sólo los datos de la película
+    public int crearPelicula(String titulo, int clasificacion, int duracion, String sinopsis) {
+
+        // Variable de control con -1 por defecto (error)
+        // Se sobreescribe con 1 si todo va bien
+        int columnasModificadas = -1;
+
+        try {
+            // Insert into (insertar nuevo registro)
+            // ? son parámetros
+            // No se concatenan strings (más seguro)
+            String query = "insert into pelicula (titulo,clasificacion, duracion, sinopsis) values (?, ?, ?, ?)";
+
+            // Preparamos la consulta
+            PreparedStatement stmt = con.prepareStatement(query);
+
+            // Se le asignan los valores a cada ?, recibidos por parámetros
+            stmt.setString(1, titulo);
+            stmt.setInt(2, clasificacion);
+            stmt.setInt(3, duracion);
+            stmt.setString(4, sinopsis);
+
+            // Ejecutamos el INSERT (devuelve las filas modificadas)
+            columnasModificadas = stmt.executeUpdate();
+
+        } catch (Exception e) {
+            System.out.println("Hubo un problema con la BD");
+            e.printStackTrace();
+        }
+
+        return columnasModificadas;
+
+    }
+
+    //Método para eliminar películas por medio de su id
+    public int eliminarPeliculas(int id){
+
+        //Variable de control
+        // -1 Error, Se sobreescribe, correcto
+        int columnasBorradas = -1;
+
+        try {
+            
+            //Delete from - elimina registros
+            //Where id=? - solo una película
+            //? Parámetro seguro
+            String query = "delete from pelicula where id=?";
+            
+            //Preparamos la sentencia
+            PreparedStatement stmt = con.prepareStatement(query);
+
+            //Asignamos el parámetro
+            stmt.setInt(1, id);
+
+            //Ejecutamos el Delete
+            columnasBorradas = stmt.executeUpdate();
+
+        } catch (Exception e) {
+            System.out.println("hubo un problema al borrar la id " + id);
+            e.printStackTrace();
+        }
+
+        return columnasBorradas;
+    }
+
 }

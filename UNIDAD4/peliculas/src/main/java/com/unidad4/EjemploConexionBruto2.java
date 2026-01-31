@@ -79,7 +79,7 @@ public class EjemploConexionBruto2 {
 
         } catch (Exception e) {
             e.printStackTrace();
-        }*/
+        }
 
         //Comprobar el funcionamiento de modificarPelicula
 
@@ -91,6 +91,24 @@ public class EjemploConexionBruto2 {
 
         //Llamamos al método
         BDPeliculas.modificarPelicula(3, cambios);
+
+        //Probar método crearPelicula
+        int resultado = BDPeliculas.crearPelicula("Pulp Fiction", 1, 140, "Peli de Tarantino");
+        if (resultado == 1){
+            System.out.println("Pelicula creada correctamente");
+        }else{
+            System.out.println("Error al crear la película");
+        }*/
+
+        //Probar método borrarPelicula
+        int resultado = BDPeliculas.eliminarPeliculas(7);
+        if(resultado == 1){
+            System.out.println("Película borrada correctamente");
+        }else if (resultado == 0){
+            System.out.println("No existe ninguna película con ese id");
+        }else{
+            System.out.println("Error al borrar la película");
+        }
 
 
         
