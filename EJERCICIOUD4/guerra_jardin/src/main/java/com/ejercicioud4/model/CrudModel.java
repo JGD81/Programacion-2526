@@ -93,5 +93,152 @@ public abstract class CrudModel {
         return lista.isEmpty() ? null : lista.get(0);
     }
 
+    //Método eliminar por ID
+    public boolean delete(Object id){
+        
+        //Se construye la consulta
+        String sql = "DELETE FROM " + table + " WHERE " + idColumn + " = ?";
+
+        //Try con recursos
+        try (PreparedStatement stmt = con.prepareStatement(sql)){
+            
+            //Se le asigna el ID al ? (1 indica columna del ID)
+            stmt.setObject(1, id);
+
+            //Se utiliza executeUpdate() para realizar INSERT, UPDATE ó DELETE
+            //Devuelve un int con las filas afectadas
+            int filasAfectadas = stmt.executeUpdate();
+
+            //Si se elimina una fila, true
+            return filasAfectadas > 0;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        //Si ocurre excepción, devuelve false
+        return false;
+    }
+
+    //Método que actualiza el registro (UPDATE)
+    public boolean update(Object id, Map<String,Object> data){
+        
+        //Crear SQL dinámico
+        StringBuilder sql = new StringBuilder("UPDATE " + table + " SET ");
+
+        //Se recorren las columnas
+        for(String col : data.keySet()){
+            
+            //Añade texto al StringBuilder
+            sql.append(col).append(" = ?, ");
+        }
+
+        //Se elimina la coma y el espacio final
+        sql.setLength(sql.length() - 2);
+
+        //Se añade el WHERE a la consulta
+        sql.append(" WHERE ").append(idColumn).append(" = ?");
+
+        //Try con recursos, que también convierte StringBuilder en String normal
+        try (PreparedStatement stmt = con.prepareStatement(sql.toString())){
+            
+            //Índice de parámetros (JDBD ? empiezan en 1)
+            int index = 1;
+
+            //Se asignan los valores del Map
+            for (Object value : data.values()){
+                
+                //Se devuelve la colección con los valores
+                //index++ para usar el valor actual, luego incrementar
+                stmt.setObject(index++, value);
+            }
+
+            //Asignar ID (se asigna al último ?)
+            stmt.setObject(index, id);
+
+            //Ejecutar el UPDATE
+            int filasAfectadas = stmt.executeUpdate();
+
+            //Devolver resultado (true actualizó)
+            return filasAfectadas > 0;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        //Si ocurre excepción, devuelve false
+        return false;
+
+    }
+
+    //Método insert (Inserta registro y devuelve ID generado)
+    public long insert(Map<String,Object> data){
+
+        //Se crea el inicio de la consulta SQL
+        StringBuilder sql = new StringBuilder("INSERT INTO " + table + " (");
+
+        //Añadir los nombres de las columnas
+        for(String col : data.keySet()){
+
+            //Se añade los valores del insert, separados por comas
+            sql.append(col).append(", ");
+        }
+
+        //Quitar la última coma y el espacio
+        sql.setLength(sql.length() - 2);
+
+        //Se añade VALUES a la consulta
+        sql.append(") VALUES (");
+
+        //Se añaden ? segun el número de columnas
+        for(int i = 0; i < data.size(); i++){
+            
+            //Se añade ?
+            sql.append("?, ");
+        }
+
+        //Quitar la última coma y el espacio
+        sql.setLength(sql.length() - 2);
+
+        //Cerrar el paréntesis
+        sql.append(")");
+
+        //Después del INSERT, se devuelve el ID autogenerado
+        try (PreparedStatement stmt = con.prepareStatement(sql.toString(), PreparedStatement.RETURN_GENERATED_KEYS)){
+            
+            //Índice de parámetros (JDBD ? empiezan en 1)
+            int index = 1;
+
+             //Se asignan los valores del Map
+            for(Object value : data.values()){
+                
+                //Se devuelve la colección con los valores
+                //index++ para usar el valor actual, luego incrementar
+                stmt.setObject(index++, value);
+            }
+
+            //Inserta el registro
+            stmt.executeUpdate();
+
+            //Devuelve un resulset con el ID nuevo
+            ResultSet rs = stmt.getGeneratedKeys();
+
+            //Mueve al primer resultado
+            if (rs.next()){
+
+                //Obtiene la primera columna (ID)
+                return rs.getLong(1);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        //Si algo falla (-1 no puede ser un valor ID)
+        return -1;
+    }
+
+
+
 
 }
