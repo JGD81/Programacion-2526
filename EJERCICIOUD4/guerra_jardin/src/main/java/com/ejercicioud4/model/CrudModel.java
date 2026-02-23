@@ -238,7 +238,54 @@ public abstract class CrudModel {
         return -1;
     }
 
+    //Método count() contar regirstros
+    //Se usa long porque una tabla podría tener millones de registros 
+    //long soporta números más grandes que int
+    public long count(){
 
+        //Construcción del SQL
+        String sql = "SELECT COUNT(*) FROM " + table;
 
+        //Se crea el PreparedStatement
+        //Se ejecuta directamente executeQuery()
+        //Se guarda el resultado en rs
+        try (PreparedStatement stmt = con.prepareStatement(sql); 
+        ResultSet rs = stmt.executeQuery()){
 
+            //Resulset empieza antes del primer registro
+            //mueve el cursor a la primera fila (COUNT siempre tiene 1 fila)
+            if(rs.next()){
+                //La consluta devuelve una sola columna
+                //que está en posición 1
+                return rs.getLong(1);
+            }
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        //Si algo falla
+        return 0;
+    }
+
+    //Método paginación
+    public List<Map<String,Object>> findAll(int page, int size){
+
+        //Devolver los registros
+        int offset = (page - 1) * size;
+
+        //Construcción del SQL
+        String sql = "SELECT * FROM " + table + "LIMIT ? OFFSET ?";
+
+        //Calcula el offset
+        //Construye el SQL con LIMIT Y OFFSET
+        //Asigna parámetros
+        //Ejecuta SELECT
+        //Devuelve lista
+        return executeQuery(sql, size, offset);
+    }
+
+    //Métodos abstractos
+    //Quedan con cuaerpo vacío, ya que dependen del modelo concreto
+    public abstract List<Map<String, Object>> filtrar (String campo, Object valor);
+    public abstract List<Map<String, Object>> buscar(String campo, String comparador, String texto);
 }
