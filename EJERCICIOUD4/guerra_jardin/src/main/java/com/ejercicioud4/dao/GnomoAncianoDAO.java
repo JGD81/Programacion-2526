@@ -50,7 +50,8 @@ public class GnomoAncianoDAO extends CrudModel {
 
     //Método que permite comparaciones dinámicas
     public List<Map<String, Object>> buscar(String campo, String comparador, String texto){
-
+        
+        //Se valida que el comparador sea el correcto
         if (!comparador.equals(">") &&
             !comparador.equals("<") &&
             !comparador.equals(">=") &&

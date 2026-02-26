@@ -83,7 +83,7 @@ public abstract class CrudModel {
     public Map<String,Object> findById(Object id){
 
         //Se construye la consulta
-        String sql = "SELECT * FROM " + table + "WHERE " + idColumn + " = ?";
+        String sql = "SELECT * FROM " + table + " WHERE " + idColumn + " = ?";
 
         //Ejecutamos la consulta
         List<Map<String,Object>> lista = executeQuery(sql, id);
@@ -274,7 +274,7 @@ public abstract class CrudModel {
         int offset = (page - 1) * size;
 
         //Construcción del SQL
-        String sql = "SELECT * FROM " + table + "LIMIT ? OFFSET ?";
+        String sql = "SELECT * FROM " + table + " LIMIT ? OFFSET ?";
 
         //Calcula el offset
         //Construye el SQL con LIMIT Y OFFSET
