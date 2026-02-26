@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.ejercicioud4.dao.GnomoAncianoDAO;
+import com.ejercicioud4.dao.TopoCombateDAO;
 import com.ejercicioud4.utils.ConexionBD;
 
 public class Main {
@@ -22,7 +23,7 @@ public class Main {
         PRUEBAS GNOMOANCIANODAO
         =====================================================
         */
-        
+        /*
         //Creamos un nuevo objeto DAO de GnomoAnciano
         GnomoAncianoDAO daoGnomo = new GnomoAncianoDAO();
 
@@ -32,7 +33,7 @@ public class Main {
         //findAll()
         System.out.println(daoGnomo.findAll());
 
-        /* 
+         
         //Método insert()
         //Creamos un nuevo HashMap con un nuevo Gnomo
         Map<String,Object> nuevo = new HashMap<>();
@@ -80,12 +81,27 @@ public class Main {
         //Método paginación 
         System.out.println("Página 1:");
         System.out.println(daoGnomo.findAll(1, 3));
-        */
+        
         //Métodos abstractos
         //filtrar
         System.out.println(daoGnomo.filtrar("edad", 64));
         //buscar
         System.out.println(daoGnomo.buscar("edad", ">=", "43"));
+        */
+
+        /*
+        =====================================================
+        PRUEBAS TOPOCOMBATEDAO
+        =====================================================
+        */
+
+        TopoCombateDAO daoTopo = new TopoCombateDAO();
+
+        //Contar registros count()
+        System.out.println("Total registros: " + daoTopo.count());
+
+        System.out.println(daoTopo.filtrar("horasSueño",5));
+        System.out.println(daoTopo.findById(9));
 
     }
 }
