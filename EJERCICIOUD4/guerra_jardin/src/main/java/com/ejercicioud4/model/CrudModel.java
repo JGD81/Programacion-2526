@@ -11,222 +11,222 @@ import java.util.Map;
 import com.ejercicioud4.utils.ConexionBD;
 
 public abstract class CrudModel {
-    
-    //Atributos
-    //Conexión a la base de datos
+
+    // Atributos
+    // Conexión a la base de datos
     protected Connection con;
-    //Atributo para guardar el nombre de la tabla
+    // Atributo para guardar el nombre de la tabla
     protected String table;
-    //Atributo para el id de cada columna
+    // Atributo para el id de cada columna
     protected String idColumn;
-    //Atributo para guardar el nombre de las columnas
+    // Atributo para guardar el nombre de las columnas
     protected List<String> columns;
 
-    //Llama al método conectar() de la clase ConexionDB para
-    //reutilizar la lógica de conexión.
-    public CrudModel(){
+    // Llama al método conectar() de la clase ConexionDB para
+    // reutilizar la lógica de conexión.
+    public CrudModel() {
         this.con = ConexionBD.conectar();
     }
 
-    //Método auxiliar
-    protected List<Map<String, Object>> executeQuery(String sql, Object... params){
+    // Método auxiliar
+    protected List<Map<String, Object>> executeQuery(String sql, Object... params) {
 
-        //Creamos la lista de resultados
-        List<Map<String,Object>> lista = new ArrayList<>();
+        // Creamos la lista de resultados
+        List<Map<String, Object>> lista = new ArrayList<>();
 
-        //Try con recursos (el PreparedStatement se cerrará automáticamente)
-        try (PreparedStatement stmt = con.prepareStatement(sql)){
+        // Try con recursos (el PreparedStatement se cerrará automáticamente)
+        try (PreparedStatement stmt = con.prepareStatement(sql)) {
 
-            //Asignación de parámetros
-            for(int i= 0; i < params.length; i++){
-                stmt.setObject( i + 1, params[i]);
+            // Asignación de parámetros
+            for (int i = 0; i < params.length; i++) {
+                stmt.setObject(i + 1, params[i]);
             }
-            
-            //Ejecutar la consulta
+
+            // Ejecutar la consulta
             ResultSet rs = stmt.executeQuery();
-            
-            //Se recorren los resultados 
+
+            // Se recorren los resultados
             while (rs.next()) {
 
-                //Crear un registro
+                // Crear un registro
                 Map<String, Object> registro = new HashMap<>();
 
-                //Cargar las columnas dinámicamente
-                for (String col : columns){
+                // Cargar las columnas dinámicamente
+                for (String col : columns) {
                     registro.put(col, rs.getObject(col));
                 }
 
-                //Añade el registro a la lista
+                // Añade el registro a la lista
                 lista.add(registro);
-                
+
             }
-            
+
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        //Se devuelve la lista
+        // Se devuelve la lista
         return lista;
     }
 
-    //Método Obtener todos los registros de la tabla
-    public List<Map<String,Object>> findAll(){
-        
-        //Creamos la consulta
+    // Método Obtener todos los registros de la tabla
+    public List<Map<String, Object>> findAll() {
+
+        // Creamos la consulta
         String sql = "SELECT * FROM " + table;
 
-        //Devolvemos el resultado de la consulta usando el método auxilar
+        // Devolvemos el resultado de la consulta usando el método auxilar
         return executeQuery(sql);
     }
 
-    //Método buscar por ID
-    public Map<String,Object> findById(Object id){
+    // Método buscar por ID
+    public Map<String, Object> findById(Object id) {
 
-        //Se construye la consulta
+        // Se construye la consulta
         String sql = "SELECT * FROM " + table + " WHERE " + idColumn + " = ?";
 
-        //Ejecutamos la consulta
-        List<Map<String,Object>> lista = executeQuery(sql, id);
-        
-        //Devuelve true si la lista no tiene elementos
-        //o el elemento obtenido
+        // Ejecutamos la consulta
+        List<Map<String, Object>> lista = executeQuery(sql, id);
+
+        // Devuelve true si la lista no tiene elementos
+        // o el elemento obtenido
         return lista.isEmpty() ? null : lista.get(0);
     }
 
-    //Método eliminar por ID
-    public boolean delete(Object id){
-        
-        //Se construye la consulta
+    // Método eliminar por ID
+    public boolean delete(Object id) {
+
+        // Se construye la consulta
         String sql = "DELETE FROM " + table + " WHERE " + idColumn + " = ?";
 
-        //Try con recursos
-        try (PreparedStatement stmt = con.prepareStatement(sql)){
-            
-            //Se le asigna el ID al ? (1 indica columna del ID)
+        // Try con recursos
+        try (PreparedStatement stmt = con.prepareStatement(sql)) {
+
+            // Se le asigna el ID al ? (1 indica columna del ID)
             stmt.setObject(1, id);
 
-            //Se utiliza executeUpdate() para realizar INSERT, UPDATE ó DELETE
-            //Devuelve un int con las filas afectadas
+            // Se utiliza executeUpdate() para realizar INSERT, UPDATE ó DELETE
+            // Devuelve un int con las filas afectadas
             int filasAfectadas = stmt.executeUpdate();
 
-            //Si se elimina una fila, true
+            // Si se elimina una fila, true
             return filasAfectadas > 0;
 
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        //Si ocurre excepción, devuelve false
+        // Si ocurre excepción, devuelve false
         return false;
     }
 
-    //Método que actualiza el registro (UPDATE)
-    public boolean update(Object id, Map<String,Object> data){
-        
-        //Crear SQL dinámico
+    // Método que actualiza el registro (UPDATE)
+    public boolean update(Object id, Map<String, Object> data) {
+
+        // Crear SQL dinámico
         StringBuilder sql = new StringBuilder("UPDATE " + table + " SET ");
 
-        //Se recorren las columnas
-        for(String col : data.keySet()){
-            
-            //Añade texto al StringBuilder
+        // Se recorren las columnas
+        for (String col : data.keySet()) {
+
+            // Añade texto al StringBuilder
             sql.append(col).append(" = ?, ");
         }
 
-        //Se elimina la coma y el espacio final
+        // Se elimina la coma y el espacio final
         sql.setLength(sql.length() - 2);
 
-        //Se añade el WHERE a la consulta
+        // Se añade el WHERE a la consulta
         sql.append(" WHERE ").append(idColumn).append(" = ?");
 
-        //Try con recursos, que también convierte StringBuilder en String normal
-        try (PreparedStatement stmt = con.prepareStatement(sql.toString())){
-            
-            //Índice de parámetros (JDBD ? empiezan en 1)
+        // Try con recursos, que también convierte StringBuilder en String normal
+        try (PreparedStatement stmt = con.prepareStatement(sql.toString())) {
+
+            // Índice de parámetros (JDBD ? empiezan en 1)
             int index = 1;
 
-            //Se asignan los valores del Map
-            for (Object value : data.values()){
-                
-                //Se devuelve la colección con los valores
-                //index++ para usar el valor actual, luego incrementar
+            // Se asignan los valores del Map
+            for (Object value : data.values()) {
+
+                // Se devuelve la colección con los valores
+                // index++ para usar el valor actual, luego incrementar
                 stmt.setObject(index++, value);
             }
 
-            //Asignar ID (se asigna al último ?)
+            // Asignar ID (se asigna al último ?)
             stmt.setObject(index, id);
 
-            //Ejecutar el UPDATE
+            // Ejecutar el UPDATE
             int filasAfectadas = stmt.executeUpdate();
 
-            //Devolver resultado (true actualizó)
+            // Devolver resultado (true actualizó)
             return filasAfectadas > 0;
 
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        //Si ocurre excepción, devuelve false
+        // Si ocurre excepción, devuelve false
         return false;
 
     }
 
-    //Método insert (Inserta registro y devuelve ID generado)
-    public long insert(Map<String,Object> data){
+    // Método insert (Inserta registro y devuelve ID generado)
+    public long insert(Map<String, Object> data) {
 
-        //Se crea el inicio de la consulta SQL
+        // Se crea el inicio de la consulta SQL
         StringBuilder sql = new StringBuilder("INSERT INTO " + table + " (");
 
-        //Añadir los nombres de las columnas
-        for(String col : data.keySet()){
+        // Añadir los nombres de las columnas
+        for (String col : data.keySet()) {
 
-            //Se añade los valores del insert, separados por comas
+            // Se añade los valores del insert, separados por comas
             sql.append(col).append(", ");
         }
 
-        //Quitar la última coma y el espacio
+        // Quitar la última coma y el espacio
         sql.setLength(sql.length() - 2);
 
-        //Se añade VALUES a la consulta
+        // Se añade VALUES a la consulta
         sql.append(") VALUES (");
 
-        //Se añaden ? segun el número de columnas
-        for(int i = 0; i < data.size(); i++){
-            
-            //Se añade ?
+        // Se añaden ? segun el número de columnas
+        for (int i = 0; i < data.size(); i++) {
+
+            // Se añade ?
             sql.append("?, ");
         }
 
-        //Quitar la última coma y el espacio
+        // Quitar la última coma y el espacio
         sql.setLength(sql.length() - 2);
 
-        //Cerrar el paréntesis
+        // Cerrar el paréntesis
         sql.append(")");
 
-        //Después del INSERT, se devuelve el ID autogenerado
-        try (PreparedStatement stmt = con.prepareStatement(sql.toString(), PreparedStatement.RETURN_GENERATED_KEYS)){
-            
-            //Índice de parámetros (JDBD ? empiezan en 1)
+        // Después del INSERT, se devuelve el ID autogenerado
+        try (PreparedStatement stmt = con.prepareStatement(sql.toString(), PreparedStatement.RETURN_GENERATED_KEYS)) {
+
+            // Índice de parámetros (JDBD ? empiezan en 1)
             int index = 1;
 
-             //Se asignan los valores del Map
-            for(Object value : data.values()){
-                
-                //Se devuelve la colección con los valores
-                //index++ para usar el valor actual, luego incrementar
+            // Se asignan los valores del Map
+            for (Object value : data.values()) {
+
+                // Se devuelve la colección con los valores
+                // index++ para usar el valor actual, luego incrementar
                 stmt.setObject(index++, value);
             }
 
-            //Inserta el registro
+            // Inserta el registro
             stmt.executeUpdate();
 
-            //Devuelve un resulset con el ID nuevo
+            // Devuelve un resulset con el ID nuevo
             ResultSet rs = stmt.getGeneratedKeys();
 
-            //Mueve al primer resultado
-            if (rs.next()){
+            // Mueve al primer resultado
+            if (rs.next()) {
 
-                //Obtiene la primera columna (ID)
+                // Obtiene la primera columna (ID)
                 return rs.getLong(1);
             }
 
@@ -234,58 +234,59 @@ public abstract class CrudModel {
             e.printStackTrace();
         }
 
-        //Si algo falla (-1 no puede ser un valor ID)
+        // Si algo falla (-1 no puede ser un valor ID)
         return -1;
     }
 
-    //Método count() contar regirstros
-    //Se usa long porque una tabla podría tener millones de registros 
-    //long soporta números más grandes que int
-    public long count(){
+    // Método count() contar regirstros
+    // Se usa long porque una tabla podría tener millones de registros
+    // long soporta números más grandes que int
+    public long count() {
 
-        //Construcción del SQL
+        // Construcción del SQL
         String sql = "SELECT COUNT(*) FROM " + table;
 
-        //Se crea el PreparedStatement
-        //Se ejecuta directamente executeQuery()
-        //Se guarda el resultado en rs
-        try (PreparedStatement stmt = con.prepareStatement(sql); 
-        ResultSet rs = stmt.executeQuery()){
+        // Se crea el PreparedStatement
+        // Se ejecuta directamente executeQuery()
+        // Se guarda el resultado en rs
+        try (PreparedStatement stmt = con.prepareStatement(sql);
+                ResultSet rs = stmt.executeQuery()) {
 
-            //Resulset empieza antes del primer registro
-            //mueve el cursor a la primera fila (COUNT siempre tiene 1 fila)
-            if(rs.next()){
-                //La consluta devuelve una sola columna
-                //que está en posición 1
+            // Resulset empieza antes del primer registro
+            // mueve el cursor a la primera fila (COUNT siempre tiene 1 fila)
+            if (rs.next()) {
+                // La consluta devuelve una sola columna
+                // que está en posición 1
                 return rs.getLong(1);
             }
-            
+
         } catch (Exception e) {
             e.printStackTrace();
         }
-        //Si algo falla
+        // Si algo falla
         return 0;
     }
 
-    //Método paginación
-    public List<Map<String,Object>> findAll(int page, int size){
+    // Método paginación
+    public List<Map<String, Object>> findAll(int page, int size) {
 
-        //Devolver los registros
+        // Devolver los registros
         int offset = (page - 1) * size;
 
-        //Construcción del SQL
+        // Construcción del SQL
         String sql = "SELECT * FROM " + table + " LIMIT ? OFFSET ?";
 
-        //Calcula el offset
-        //Construye el SQL con LIMIT Y OFFSET
-        //Asigna parámetros
-        //Ejecuta SELECT
-        //Devuelve lista
+        // Calcula el offset
+        // Construye el SQL con LIMIT Y OFFSET
+        // Asigna parámetros
+        // Ejecuta SELECT
+        // Devuelve lista
         return executeQuery(sql, size, offset);
     }
 
-    //Métodos abstractos
-    //Quedan con cuaerpo vacío, ya que dependen del modelo concreto
-    public abstract List<Map<String, Object>> filtrar (String campo, Object valor);
+    // Métodos abstractos
+    // Quedan con cuaerpo vacío, ya que dependen del modelo concreto
+    public abstract List<Map<String, Object>> filtrar(String campo, Object valor);
+
     public abstract List<Map<String, Object>> buscar(String campo, String comparador, String texto);
 }

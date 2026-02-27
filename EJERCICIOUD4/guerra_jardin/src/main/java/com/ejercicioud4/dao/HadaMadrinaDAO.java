@@ -6,28 +6,29 @@ import java.util.Map;
 
 import com.ejercicioud4.model.CrudModel;
 
-public class TopoCombateDAO extends CrudModel {
+public class HadaMadrinaDAO extends CrudModel {
 
-    public TopoCombateDAO() {
+    // Primero se ejecuta el constructor padre (CrudModel)
+    // que abre la conexión con la BDD. Después se ejecuta
+    // el constructor
+    public HadaMadrinaDAO() {
 
-        // Nombre de la tabla que usará el CRUD
-        this.table = "TopoCombate";
+        // Nombre tabla que usará el CRUD
+        this.table = "HadaMadrina";
 
-        // Columna con la clave primaria
-        this.idColumn = "idTopoCombate";
+        // Columna con clave primaria
+        this.idColumn = "idHadaMadrina";
 
         // Construye Maps en executeQuery()
         // Columnas de la tabla
         this.columns = Arrays.asList(
-                "idTopoCombate",
+                "idHadaMadrina",
                 "nombre",
                 "apodoGuerra",
-                "modelo",
-                "fuerzaExcavacion",
-                "agudezaOlfativa",
-                "horasSueño",
-                "tiempoTierraEnOjos",
-                "idGnomoAnciano");
+                "edad",
+                "envergaduraAlas",
+                "nivelPasivoAgresividad",
+                "polvoPurpurina");
     }
 
     @Override
@@ -35,14 +36,15 @@ public class TopoCombateDAO extends CrudModel {
     // Método filtrar
     public List<Map<String, Object>> filtrar(String campo, Object valor) {
 
-        // Construcción SQL
+        // Consulta SQL
         String sql = "SELECT * FROM " + table + " WHERE " + campo + " = ?";
 
-        // Llama al métido auxiliar padre
+        // Llama al método auxiliar padre
         return executeQuery(sql, valor);
     }
 
     @Override
+
     // Método que permite comparaciones dinámicas
     public List<Map<String, Object>> buscar(String campo, String comparador, String texto) {
 
@@ -54,12 +56,12 @@ public class TopoCombateDAO extends CrudModel {
                 !comparador.equals("!=") &&
                 !comparador.equalsIgnoreCase("LIKE")) {
 
-            // Excepción si el comparado no es el correcto
+            // Excepción si el comparador no es el correcto
             throw new IllegalArgumentException("Comparador no válido");
         }
 
-        String sql = "SELECT * FROM " + table + " WHERE " + campo + " " +
-                comparador + " ?";
+        // Construcción del SQL completo
+        String sql = "SELECT * FROM " + table + " WHERE " + campo + " " + comparador + " ?";
 
         // Búsqueda con LIKE con coincidencias parciales
         if (comparador.equalsIgnoreCase("LIKE")) {
