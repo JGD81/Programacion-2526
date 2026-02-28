@@ -236,8 +236,7 @@ public class TopoCombateDAO extends CrudModel {
             //Se ejecuta la consulta
             ResultSet rs = stmt.executeQuery();
 
-            //Se crea el PreparedStatement con la conexión con. El try cierra
-            //automáticamente el statement
+            //Devuelve true mientras haya registros
             while (rs.next()) {
 
                 //Se leen las columnas y se convierte al tipo indicado

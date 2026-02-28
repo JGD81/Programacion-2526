@@ -9,7 +9,9 @@ import com.ejercicioud4.dao.DuendeCombateDAO;
 import com.ejercicioud4.dao.GnomoAncianoDAO;
 import com.ejercicioud4.dao.HadaMadrinaDAO;
 import com.ejercicioud4.dao.TopoCombateDAO;
+import com.ejercicioud4.model.DuendeCombateDO;
 import com.ejercicioud4.model.GnomoAncianoDO;
+import com.ejercicioud4.model.HadaMadrinaDO;
 import com.ejercicioud4.model.TopoCombateDO;
 import com.ejercicioud4.utils.ConexionBD;
 
@@ -160,39 +162,74 @@ public class Main {
          * } else {
          * System.out.println("No hay gnomos en la base de datos.");
          * }
-        
-        // Método StringBuilder
-        GnomoAncianoDAO dao = new GnomoAncianoDAO();
-
-        String informe = dao.generarInformeGnomos();
-
-        System.out.println(informe);
+         * 
+         * // Método StringBuilder
+         * GnomoAncianoDAO dao = new GnomoAncianoDAO();
+         * 
+         * String informe = dao.generarInformeGnomos();
+         * 
+         * System.out.println(informe);
+         * 
+         * 
+         * // Pruebas métodos de TopoCombate
+         * TopoCombateDAO topoDAO = new TopoCombateDAO();
+         * 
+         * System.out.println("---- Topos con tierra en los ojos ----");
+         * ArrayList<TopoCombateDO> tierra = topoDAO.cargarToposConTierraEnOjos(1);
+         * for (TopoCombateDO t : tierra) {
+         * System.out.println(t);
+         * }
+         * 
+         * System.out.println("\n---- Topos descansados ----");
+         * ArrayList<TopoCombateDO> descansados = topoDAO.cargarToposDescansados();
+         * for (TopoCombateDO t : descansados) {
+         * System.out.println(t);
+         * }
+         * 
+         * System.out.println("\n---- Promedio fuerza excavación ----");
+         * double promedio = topoDAO.calcularPromedioFuerzaExcavacion(1);
+         * System.out.println("Promedio: " + promedio);
+         * 
+         * System.out.println("\n---- Paginación (3 elementos, página 1) ----");
+         * ArrayList<TopoCombateDO> paginado = topoDAO.cargarToposPaginado(3, 1);
+         * for (TopoCombateDO t : paginado) {
+         * System.out.println(t);
+         * }
+         * 
          */
 
-    //Pruebas métodos de TopoCombate
-    TopoCombateDAO topoDAO = new TopoCombateDAO();
+        // Pruebas métodos HadaMadrinaDAO
 
-    System.out.println("---- Topos con tierra en los ojos ----");
-    ArrayList<TopoCombateDO> tierra = topoDAO.cargarToposConTierraEnOjos(1);
-    for (TopoCombateDO t : tierra) {
-        System.out.println(t);
-    }
+        HadaMadrinaDAO hadaDAO = new HadaMadrinaDAO();
 
-    System.out.println("\n---- Topos descansados ----");
-    ArrayList<TopoCombateDO> descansados = topoDAO.cargarToposDescansados();
-    for (TopoCombateDO t : descansados) {
-        System.out.println(t);
-    }
+        // Cargar duendes de un hada concreta
+        System.out.println("----- DUENDES DEL HADA 1 -----");
+        ArrayList<DuendeCombateDO> duendes = hadaDAO.cargarDuendes(1);
 
-    System.out.println("\n---- Promedio fuerza excavación ----");
-    double promedio = topoDAO.calcularPromedioFuerzaExcavacion(1);
-    System.out.println("Promedio: " + promedio);
+        for (DuendeCombateDO d : duendes) {
+            System.out.println(d);
+        }
 
-    System.out.println("\n---- Paginación (3 elementos, página 1) ----");
-    ArrayList<TopoCombateDO> paginado = topoDAO.cargarToposPaginado(3, 1);
-    for (TopoCombateDO t : paginado) {
-        System.out.println(t);
-    }
+        // Calcular polvo total (nivelPasivoAgresividad > 3)
+        System.out.println("\n----- POLVO PURPURINA TOTAL -----");
+        double totalPolvo = hadaDAO.calcularPolvoPurpurinaTotal();
+        System.out.println("Total polvo: " + totalPolvo);
+
+        
+        // Obtener hada más veterana
+        System.out.println("\n----- HADA MÁS VETERANA -----");
+        HadaMadrinaDO veterana = hadaDAO.obtenerHadaMasVeterana();
+        System.out.println(veterana);
+        
+        
+        // Cargar hadas con alas pequeñas
+        System.out.println("\n----- HADAS CON ALAS < 50 -----");
+        ArrayList<HadaMadrinaDO> hadasPequenas = hadaDAO.cargarHadasConAlasPequenias(50);
+
+        for (HadaMadrinaDO h : hadasPequenas) {
+            System.out.println(h);
+        }
+        
     }
 
 }
