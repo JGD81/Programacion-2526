@@ -160,14 +160,39 @@ public class Main {
          * } else {
          * System.out.println("No hay gnomos en la base de datos.");
          * }
-         */
+        
         // Método StringBuilder
         GnomoAncianoDAO dao = new GnomoAncianoDAO();
 
         String informe = dao.generarInformeGnomos();
 
         System.out.println(informe);
+         */
 
+    //Pruebas métodos de TopoCombate
+    TopoCombateDAO topoDAO = new TopoCombateDAO();
+
+    System.out.println("---- Topos con tierra en los ojos ----");
+    ArrayList<TopoCombateDO> tierra = topoDAO.cargarToposConTierraEnOjos(1);
+    for (TopoCombateDO t : tierra) {
+        System.out.println(t);
+    }
+
+    System.out.println("\n---- Topos descansados ----");
+    ArrayList<TopoCombateDO> descansados = topoDAO.cargarToposDescansados();
+    for (TopoCombateDO t : descansados) {
+        System.out.println(t);
+    }
+
+    System.out.println("\n---- Promedio fuerza excavación ----");
+    double promedio = topoDAO.calcularPromedioFuerzaExcavacion(1);
+    System.out.println("Promedio: " + promedio);
+
+    System.out.println("\n---- Paginación (3 elementos, página 1) ----");
+    ArrayList<TopoCombateDO> paginado = topoDAO.cargarToposPaginado(3, 1);
+    for (TopoCombateDO t : paginado) {
+        System.out.println(t);
+    }
     }
 
 }

@@ -63,4 +63,20 @@ public class TopoCombateDO {
     public int getIdGnomoAnciano() {
         return idGnomoAnciano;
     }
+
+    //Se soobrescribe toString() para que se muestre correctamente 
+    @Override
+    public String toString() {
+        return "TopoCombateDO{" +
+                "id=" + idTopoCombate +
+                ", nombre='" + nombre + '\'' +
+                ", apodoGuerra=" + apodoGuerra +
+                ", modelo" + modelo +
+                ", fuerzaExcavacion=" + fuerzaExcavacion +
+                ", agudezaOlfativa=" + agudezaOlfativa +
+                ", horasSueno=" + horasSuenio +
+                ", tiempoTierraEnOjos=" + tiempoTierraEnOjos +
+                ", idGnomoAnciano=" + idGnomoAnciano +
+                '}';
+    }
 }
