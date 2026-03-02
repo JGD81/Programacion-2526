@@ -24,7 +24,6 @@ public class Main {
         paises.add(francia);
         paises.add(alemania);
         paises.add(japon);
-    
 
         // Recorrer Arraylist
         for (int i = 0; i < paises.size(); i++) {
@@ -57,18 +56,18 @@ public class Main {
             System.out.println("No existe ese país.");
         }
 
-        //Llamada al método 5
-        
+        // Llamada al método 5
+
         ordenarPorPoblacion(paises);
         System.out.println(paises);
 
-        //Llama al método 6
+        // Llama al método 6
         ejemploBasico();
 
-        //LLamada al método 7
+        // LLamada al método 7
         System.out.println(contarPorContinente(paises));
-        
-        //Llamada al método 8
+
+        // Llamada al método 8
         System.out.println(agruparPorContinente(paises));
 
     }
@@ -105,7 +104,7 @@ public class Main {
         return mayor;
     }
 
-    //Método que busca por continente
+    // Método que busca por continente
     public static ArrayList<Pais> filtrarPorContinente(ArrayList<Pais> lista, String continente) {
 
         ArrayList<Pais> filtroContinente = new ArrayList<>();
@@ -122,7 +121,7 @@ public class Main {
         return filtroContinente;
     }
 
-    //Método que busca por nombre del país
+    // Método que busca por nombre del país
     public static Pais buscarPorNombre(ArrayList<Pais> lista, String nombre) {
 
         for (Pais pais : lista) {
@@ -135,63 +134,63 @@ public class Main {
         return null;
     }
 
-    public static ArrayList<Pais> paisesConMasDe(ArrayList<Pais> lista, long poblacionMinima){
+    public static ArrayList<Pais> paisesConMasDe(ArrayList<Pais> lista, long poblacionMinima) {
 
         ArrayList<Pais> resultado = new ArrayList<>();
 
         for (Pais pais : lista) {
 
-            if (pais.getPoblacion() > poblacionMinima){
+            if (pais.getPoblacion() > poblacionMinima) {
                 resultado.add(pais);
             }
-            
+
         }
 
         return resultado;
     }
 
-    //Método que ordena los paises por población
-    public static void ordenarPorPoblacion(ArrayList<Pais> lista){
-        //Método predefinido para comparar valores
+    // Método que ordena los paises por población
+    public static void ordenarPorPoblacion(ArrayList<Pais> lista) {
+        // Método predefinido para comparar valores
         lista.sort(Comparator.comparingLong(Pais::getPoblacion).reversed());
     }
 
-    public static void ejemploBasico(){
+    public static void ejemploBasico() {
 
-        //Crear HashMap (Clave, Valor)
+        // Crear HashMap (Clave, Valor)
         HashMap<String, Integer> ejemplo = new HashMap<>();
 
-        //Añadir elementos
+        // Añadir elementos
         ejemplo.put("España", 47000000);
         ejemplo.put("Francia", 67000000);
         ejemplo.put("Alemania", 83000000);
 
-        //Obtener población Francia
+        // Obtener población Francia
         System.out.println("Población de Francia: " + ejemplo.get("Francia"));
 
-        //Recorrer Map (foreach). Se recorre todo el Hashmap
-        for (Map.Entry<String, Integer> entry : ejemplo.entrySet()){
+        // Recorrer Map (foreach). Se recorre todo el Hashmap
+        for (Map.Entry<String, Integer> entry : ejemplo.entrySet()) {
             System.out.println(entry.getKey() + "->" + entry.getValue());
         }
     }
 
-    //Contar cuantas veces aparece cada continente en el Arraylist
-    public static Map<String, Integer> contarPorContinente(ArrayList<Pais> lista){
+    // Contar cuantas veces aparece cada continente en el Arraylist
+    public static Map<String, Integer> contarPorContinente(ArrayList<Pais> lista) {
 
-        //Se crea HashMap vacío, que devolverá clave - valor (Continente - valor)
+        // Se crea HashMap vacío, que devolverá clave - valor (Continente - valor)
         Map<String, Integer> totalContinente = new HashMap<>();
-        
-        //Recorremos el Arraylist
-        for(Pais pais : lista){
-            //Buscamos el continente de cada país por iteración
+
+        // Recorremos el Arraylist
+        for (Pais pais : lista) {
+            // Buscamos el continente de cada país por iteración
             String continente = pais.getContinente();
 
-            //Si el Hasmap no contiene la clave con el continente de la iteración
-            //Se añade: continente (clave) = valor (1)
-            if(!totalContinente.containsKey(continente)){
+            // Si el Hasmap no contiene la clave con el continente de la iteración
+            // Se añade: continente (clave) = valor (1)
+            if (!totalContinente.containsKey(continente)) {
                 totalContinente.put(continente, 1);
-            }else{
-                //Si lo tiene, se coje el valor actual, y se le suma 1
+            } else {
+                // Si lo tiene, se coje el valor actual, y se le suma 1
                 int actual = totalContinente.get(continente);
                 totalContinente.put(continente, actual + 1);
             }
@@ -200,26 +199,80 @@ public class Main {
         return totalContinente;
     }
 
-    //Devuelve un map con el Continente como clave, y con un ArrayList de paises como valor
-    public static Map<String, ArrayList<Pais>> agruparPorContinente(ArrayList<Pais> lista){
+    // Devuelve un map con el Continente como clave, y con un ArrayList de paises
+    // como valor
+    public static Map<String, ArrayList<Pais>> agruparPorContinente(ArrayList<Pais> lista) {
 
         Map<String, ArrayList<Pais>> total = new HashMap<>();
 
-        //Se recorre el Arraylist, y se obtiene el continente por iteración
+        // Se recorre el Arraylist, y se obtiene el continente por iteración
         for (Pais pais : lista) {
             String continente = pais.getContinente();
 
-            if(!total.containsKey(continente)){
-                //Si no existe el continente, se añade el continente como clave
-                //y se crea una nueva lista asociada como valor
+            if (!total.containsKey(continente)) {
+                // Si no existe el continente, se añade el continente como clave
+                // y se crea una nueva lista asociada como valor
                 total.put(continente, new ArrayList<>());
             }
-            
-            //Obtiene la lista asociada a ese continente
-            //y añade el país
+
+            // Obtiene la lista asociada a ese continente
+            // y añade el país
             total.get(continente).add(pais);
         }
 
         return total;
+    }
+
+    // Continente con más países
+    public static String continenteConMasPaises(ArrayList<Pais> lista) {
+
+        // Se obtiene un Map donde la clave es el continente y el valor es el número de
+        // países
+        Map<String, Integer> mapa = contarPorContinente(lista);
+
+        // Creamos dos variables auxiliares para guardar los datos obtenidos en
+        // iteraciones
+        int max = 0;
+        String continenteMax = null;
+
+        // Se recorre el Map
+        for (Map.Entry<String, Integer> entry : mapa.entrySet()) {
+
+            // Se busca el valor más alto
+            if (entry.getValue() > max) {
+                // Se guarda el valor más alto
+                max = entry.getValue();
+                // Se obtiene la clave asociada a ese valor
+                continenteMax = entry.getKey();
+            }
+        }
+
+        // Se devuelve la clave con el valor más alto
+        return continenteMax;
+    }
+
+    // País más poblado por continente
+    public static Map<String, Pais> paisMasPobladoPorContinente(ArrayList<Pais> lista) {
+
+        // Mapa donde:
+        // clave = continente
+        // valor = país más poblado de ese continente
+        Map<String, Pais> resultado = new HashMap<>();
+
+        // Recorremos la lista de países
+        for (Pais pais : lista) {
+
+            String continente = pais.getContinente();
+
+            // Obtenemos el país ya guardado para ese continente (si existe)
+            Pais guardado = resultado.get(continente);
+
+            // Si no existe todavía o el actual tiene más población
+            if (guardado == null || pais.getPoblacion() > guardado.getPoblacion()) {
+                resultado.put(continente, pais);
+            }
+        }
+
+        return resultado;
     }
 }
