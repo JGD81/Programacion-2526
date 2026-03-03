@@ -17,15 +17,53 @@ import com.ejercicioud4.utils.ConexionBD;
 
 public class Main {
     public static void main(String[] args) {
-        /*
-         * Connection con = ConexionBD.conectar();
-         * 
-         * if (con != null) {
-         * System.out.println("La conexión funciona correctamente.");
-         * } else {
-         * System.out.println("No se pudo conectar.");
-         * }
-         */
+
+        // Creación de la conexión
+        Connection con = ConexionBD.conectar();
+
+        if (con != null) {
+            System.out.println("La conexión funciona correctamente.");
+        } else {
+            System.out.println("No se pudo conectar.");
+        }
+
+        //Instanciar DAOs
+
+        GnomoAncianoDAO gnomoDAO = new GnomoAncianoDAO();
+        HadaMadrinaDAO hadaDAO = new HadaMadrinaDAO();
+
+        //Método calcularEnergiaRefunfunioTotal
+        int energiaTotal = gnomoDAO.calcularEnergiaRefunfunioTotal();
+        System.out.println("=====Energía refunfuño=====");
+        System.out.println("Energia total de refunfuño (nivel > 5): " + energiaTotal);
+
+        //Método CargarDuendes
+        System.out.println("=====CargarDuendes=====");
+        ArrayList<DuendeCombateDO> duendes = hadaDAO.cargarDuendes(1);
+        for (DuendeCombateDO d : duendes){
+            System.out.println(d);
+        }
+
+        //Método cargarHadasConAlasPequenias
+        System.out.println("=====Hadas pequeñas=====");
+        ArrayList<HadaMadrinaDO> hadasPequenias = hadaDAO.cargarHadasConAlasPequenias(100);
+
+        for(HadaMadrinaDO h : hadasPequenias){
+            System.out.println(h);
+        }
+
+        //Método update()
+        Map<String,Object> cambiosGnomo = new HashMap<>();
+        cambiosGnomo.put("edad", 200);
+        cambiosGnomo.put("nivelCascarrabias", 1);
+         
+         //Comprobamos si los datos han sido actualizados
+         boolean gnomoActualizado = gnomoDAO.update(9, cambiosGnomo);
+         
+         //Mostramos los datos del gnomo actualizado
+         System.out.println("Actualizado: " + gnomoActualizado);
+         System.out.println("Después del update: " + gnomoDAO.findById(9));
+
 
         /*
          * =====================================================
@@ -196,40 +234,42 @@ public class Main {
          * System.out.println(t);
          * }
          * 
+         * 
+         * 
+         * // Pruebas métodos HadaMadrinaDAO
+         * 
+         * HadaMadrinaDAO hadaDAO = new HadaMadrinaDAO();
+         * 
+         * // Cargar duendes de un hada concreta
+         * System.out.println("----- DUENDES DEL HADA 1 -----");
+         * ArrayList<DuendeCombateDO> duendes = hadaDAO.cargarDuendes(1);
+         * 
+         * for (DuendeCombateDO d : duendes) {
+         * System.out.println(d);
+         * }
+         * 
+         * // Calcular polvo total (nivelPasivoAgresividad > 3)
+         * System.out.println("\n----- POLVO PURPURINA TOTAL -----");
+         * double totalPolvo = hadaDAO.calcularPolvoPurpurinaTotal();
+         * System.out.println("Total polvo: " + totalPolvo);
+         * 
+         * 
+         * // Obtener hada más veterana
+         * System.out.println("\n----- HADA MÁS VETERANA -----");
+         * HadaMadrinaDO veterana = hadaDAO.obtenerHadaMasVeterana();
+         * System.out.println(veterana);
+         * 
+         * 
+         * // Cargar hadas con alas pequeñas
+         * System.out.println("\n----- HADAS CON ALAS < 50 -----");
+         * ArrayList<HadaMadrinaDO> hadasPequenas =
+         * hadaDAO.cargarHadasConAlasPequenias(50);
+         * 
+         * for (HadaMadrinaDO h : hadasPequenas) {
+         * System.out.println(h);
+         * }
          */
 
-        // Pruebas métodos HadaMadrinaDAO
-
-        HadaMadrinaDAO hadaDAO = new HadaMadrinaDAO();
-
-        // Cargar duendes de un hada concreta
-        System.out.println("----- DUENDES DEL HADA 1 -----");
-        ArrayList<DuendeCombateDO> duendes = hadaDAO.cargarDuendes(1);
-
-        for (DuendeCombateDO d : duendes) {
-            System.out.println(d);
-        }
-
-        // Calcular polvo total (nivelPasivoAgresividad > 3)
-        System.out.println("\n----- POLVO PURPURINA TOTAL -----");
-        double totalPolvo = hadaDAO.calcularPolvoPurpurinaTotal();
-        System.out.println("Total polvo: " + totalPolvo);
-
-        
-        // Obtener hada más veterana
-        System.out.println("\n----- HADA MÁS VETERANA -----");
-        HadaMadrinaDO veterana = hadaDAO.obtenerHadaMasVeterana();
-        System.out.println(veterana);
-        
-        
-        // Cargar hadas con alas pequeñas
-        System.out.println("\n----- HADAS CON ALAS < 50 -----");
-        ArrayList<HadaMadrinaDO> hadasPequenas = hadaDAO.cargarHadasConAlasPequenias(50);
-
-        for (HadaMadrinaDO h : hadasPequenas) {
-            System.out.println(h);
-        }
-        
     }
 
 }
