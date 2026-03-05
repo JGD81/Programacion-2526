@@ -55,7 +55,7 @@ public class Artista {
     //OJO, SÓLO PARA CUANDO QUERAMOS QUE SE COMPAREN POR EL ATRIBUTO NOMBRE ARTÍSTICO
     // Definimos cuándo dos Artista deben considerarse iguales
     // En este caso: si tienen el mismo nombreArtistico
-    @Override
+    /*@Override
     public boolean equals(Object obj) {
         // Si ambas referencias apuntan al mismo objeto en memoria, iguales
         if (this == obj)
@@ -70,7 +70,7 @@ public class Artista {
         Artista other = (Artista) obj;
 
         return this.nombreArtistico.equals(other.nombreArtistico);
-    }
+    }*/
 
     @Override
     public int hashCode() {
