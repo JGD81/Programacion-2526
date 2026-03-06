@@ -142,8 +142,8 @@ public class PersonajeRPG {
         String gremioTexto = guildName.isEmpty() ? "Sin gremio" : guildName;
         
         return "=== PERSONAJE RPG ===\n" + 
-                        "-> ID: <" + this.idPersonaje+ ">\n" + 
-                        "-> Nombre: <" + this.nombrePersonaje+ ">\n" + 
+                        "-> ID: <" + idPersonaje+ ">\n" + 
+                        "-> Nombre: <" + nombrePersonaje+ ">\n" + 
                         "-> Clase: <" + claseTexto + ">\n" +
                         "-> Nivel: <" + nivel + ">\n" + 
                         "-> Vida: <" + puntosVida + "> HP\n" + 

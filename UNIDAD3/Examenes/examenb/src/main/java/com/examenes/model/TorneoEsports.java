@@ -3,6 +3,8 @@ package com.examenes.model;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class TorneoEsports {
 
@@ -88,31 +90,112 @@ public class TorneoEsports {
         return (int) personajesLH;
     }
 
-    //ArrayList con el número de personajes (limitados por topN) ordenados de mayor a menor 
-    public ArrayList<PersonajeRPG> obtenerTopPersonajesPorVida(int topN){
-        //Si el límite es 0 o menos, devuelve un ArrayList vacío
-        if(topN <= 0){
+    // ArrayList con el número de personajes (limitados por topN) ordenados de mayor
+    // a menor
+    public ArrayList<PersonajeRPG> obtenerTopPersonajesPorVida(int topN) {
+        // Si el límite es 0 o menos, devuelve un ArrayList vacío
+        if (topN <= 0) {
             return new ArrayList<>();
         }
-        //Crear un nuevo ArrayList a partir del stream de listaJugadores:
-        //- Ordenados de mayor a menor y el número de personajes limitados por topN
+        // Crear un nuevo ArrayList a partir del stream de listaJugadores:
+        // - Ordenados de mayor a menor y el número de personajes limitados por topN
         ArrayList<PersonajeRPG> personajesPorVidaTop = new ArrayList<>(listaJugadores.stream()
-        .sorted((a1, a2) -> a2.getPuntosVida() - a1.getPuntosVida())
-        .limit(topN).toList()); 
+                .sorted((a1, a2) -> a2.getPuntosVida() - a1.getPuntosVida())
+                .limit(topN).toList());
 
         return personajesPorVidaTop;
     }
 
-    public PersonajeRPG buscarPersonajeMasFuerteDeGremio(String nombreGremio){
+    // Buscar el personaje más fuerte según el gremio. Si hay empate, comparar nivel
+    public PersonajeRPG buscarPersonajeMasFuerteDeGremio(String nombreGremio) {
         PersonajeRPG personajeMasFuerteGremio = listaJugadores.stream()
-        //Filtramos por nombre del gremio
-        .filter(p -> p.getGuildName()
-        .equals(nombreGremio))
-        //Comparamos los puntos de daño de los personajes y guardamos el que tiene el máximo
-        //en caso de empate, se compara el nivel
-        .max(Comparator.comparingDouble(PersonajeRPG::getPuntosDanio).thenComparing(PersonajeRPG::getNivel))
-        //si no existe, devuelve null
-        .orElse(null);
-        return personajeMasFuerteGremio; 
+                // Filtramos por nombre del gremio
+                .filter(p -> p.getGuildName()
+                        .equals(nombreGremio))
+                // Comparamos los puntos de daño de los personajes y guardamos el que tiene el
+                // máximo
+                // en caso de empate, se compara el nivel
+                .max(Comparator.comparingDouble(PersonajeRPG::getPuntosDanio).thenComparingInt(PersonajeRPG::getNivel))
+                // si no existe, devuelve null
+                .orElse(null);
+        return personajeMasFuerteGremio;
     }
+
+    // Incrementa el nivel de todos los personaes en la cantidad especificada (sin
+    // superar 100)
+    // Después del incremento, elimina a todos los personajes del torneo cuyo nivel
+    // sea menor que
+    // nivelMinimoSupervivencia
+    // Actualiza jugadoresRegistrados correctamente
+    // Devuelve true si se eliminó al menos un personaje, false en caso contrario.
+    public boolean actualizarNivelesYEliminarDebiles(int incrementoNivel, int nivelMinimoSupervivencia) {
+
+        listaJugadores.forEach(p -> {
+            int nuevoNivel = p.getNivel() + incrementoNivel;
+
+            if (nuevoNivel > 100) {
+                nuevoNivel = 100;
+            }
+
+            p.setNivel(nuevoNivel);
+        });
+
+        boolean eliminado = listaJugadores.removeIf(p -> p.getNivel() < nivelMinimoSupervivencia);
+
+        jugadoresRegistrados = listaJugadores.size();
+
+        return eliminado;
+    }
+
+    // MÉTODOS EXTRA PARA EL ESTUDIO
+    // Obtener todas las habilidades de todos los personajes del torneo
+    // -Sin repetir habilidades
+    // Devuelve un ArrayList<String>
+    // Usando Streams
+    public ArrayList<String> obtenerTodasLasHabilidades() {
+        // Con stream, se convierte ArrayList<PersonajeRPG> a Stream<PersonajeRPG>, que
+        // contiene
+        // - Personaje1, personaje2...
+        // flat.Map(p -> p.getHabilidades().stream()):
+        // - Se obtiene un Stream<String>, pero como cada personaje tiene su propio
+        // Stream, se obtiene:
+        // - Stream<Stream<String>>, que seria [Fuego, Teletransporte] [Rayo,Barrera]
+        // flatmap lo transforma a Fuego, Teletransporte, Rayo, Barrera
+        // distinct elimiina los duplicados
+        // toList convierte finalmente el Stream en Una lista
+        return new ArrayList<>(listaJugadores.stream().flatMap(p -> p.getHabilidades().stream()).distinct().toList());
+    }
+
+    // Sacar los nombres de los personajes legendarios
+    public List<String> obtenerNombresPersonajesLegendarios() {
+
+        // Convierte listaJugadores en un stream, filtra los personajes legendarios,
+        // extrae sus nombres con map() y devuelve el resultado como una lista
+        return listaJugadores.stream().filter(p -> p.isEsLegendario()).map(c -> c.getNombrePersonaje()).toList();
+    }
+
+    // Convierte la lista en stream, ordena los personajes por nivel de mayor a
+    // menor y devuelve el resultado como una lista
+    public List<PersonajeRPG> obtenerPersonajesOrdenadosPorNivel() {
+        // Mediante sorted
+        // return listaJugadores.stream().sorted((a1, a2) -> a2.getNivel() -
+        // a1.getNivel()).toList();
+        // Mediante sorted + Comparator
+        return listaJugadores.stream().sorted(Comparator.comparingInt(PersonajeRPG::getNivel).reversed()).toList();
+    }
+
+    //Agrupar los personajes por clase
+    public Map<Integer, List<PersonajeRPG>> agruparPersonajesPorClase() {
+        // Convierte la lista en stream y agrupa los personajes según su clase,
+        // devolviendo un Map donde la clave es la clase y el valor la lista de
+        // personajes
+        return listaJugadores.stream().collect(Collectors.groupingBy(PersonajeRPG::getClasePersonaje));
+    }
+    //Obtener todas las habilidades ordenadas
+    public List<String> obtenerHabilidadesOrdenadas(){
+        //En este caso, sorted, se deja vacío porque son Strings, que ya implementa comparable
+        //Si fuesen objetos, sí se necesitaría .sorted(Comparator.comparing(Objeto::getCampo))
+        return listaJugadores.stream().flatMap(p -> p.getHabilidades().stream()).distinct().toList();
+    }
+
 }
