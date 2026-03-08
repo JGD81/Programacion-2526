@@ -3,6 +3,7 @@ package com.examenc.Model;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 public class PlaylistStreaming {
@@ -164,7 +165,7 @@ public class PlaylistStreaming {
     }
 
     //Eliminar canciones de la lista que sea menor que el minimoReproducciones
-    int eliminarCancionesConPocasReproducciones(int minimoReproducciones){
+    public int eliminarCancionesConPocasReproducciones(int minimoReproducciones){
 
         /*int contador = 0;
 
@@ -194,10 +195,113 @@ public class PlaylistStreaming {
         .orElse(null);
     }
 
+    //Devolver una lista con las topN canciones más reproducidas ordenadas e mayor a menor
+    public ArrayList<CancionDigital> topCancionesMasReproducidas(int topNn){
+        /*
+        return new ArrayList<>(listaCanciones.stream()
+        .sorted((p1, p2)->p2.getNumeroReproducciones() - p1.getNumeroReproducciones())
+        .limit(topNn).toList());
+        */
+        return new ArrayList<>(listaCanciones.stream()
+        .sorted(Comparator.comparingDouble(CancionDigital::getNumeroReproducciones)
+        .reversed())
+        .limit(topNn)
+        .toList());
+
+    }
+
+    public ArrayList<CancionDigital> buscarCancionesPorArtista(String artista){
+        /* 
+        ArrayList<CancionDigital> cancionesDeArtista = new ArrayList<>();
+        
+        for (CancionDigital cancionDigital : listaCanciones) {
+            
+            if(cancionDigital.getArtista().equalsIgnoreCase(artista)){
+                cancionesDeArtista.add(cancionDigital);
+            }
+        }
+        
+        return cancionesDeArtista;
+        */
+        return new ArrayList<>(listaCanciones.stream()
+        .filter(p -> p.getArtista().equalsIgnoreCase(artista))
+        .toList());
+    }
+
+    public ArrayList<String> obtenerTodasLasEtiquetas(){
+
+        return new ArrayList<>(listaCanciones.stream()
+        .flatMap(p -> p.getEtiquetas().stream())
+        .distinct()
+        .toList());
+    }
+
+    public long contarCancionesPorGenero(int genero){
+
+        return (int) listaCanciones.stream()
+        .filter(p -> p.getGeneroMusical() == genero)
+        .count();
+    }
+
+    public CancionDigital obtenerCancionMasLarga(){
+
+        return listaCanciones.stream()
+        .max(Comparator.comparingInt(CancionDigital::getDuracionSegundos))
+        .orElse(null);
+
+    }
+
+    public int obtenerDuracionTotalPlaylist(){
+
+        return listaCanciones.stream()
+        .mapToInt(p -> p.getDuracionSegundos())
+        .sum();
+    }
+    
+    public String obtenerTitulosCanciones(){
+
+        return listaCanciones.stream().map(p -> p.getTitulo()).collect(Collectors.joining(", "));
+    }
+    
+
+    public ArrayList<CancionDigital> obtenerCancionesExplicitOrdenadas(){
+
+        return new ArrayList<>(listaCanciones.stream()
+        .filter(p -> p.isEsExplicit())
+        .sorted(Comparator.comparingDouble(CancionDigital::getPopularidad)
+        .reversed())
+        .toList());
+    }
+
+    public ArrayList<CancionDigital> topCancionesMasLargas(int n){
+
+        return new ArrayList<>(listaCanciones.stream()
+        .sorted(Comparator.comparingInt(CancionDigital::getDuracionSegundos).reversed())
+        .limit(n)
+        .toList());
+    }
+
+    
+    public ArrayList<String> obtenerArtistas(){
+
+        return new ArrayList<>(listaCanciones.stream()
+        .map(CancionDigital::getArtista)
+        .distinct()
+        .toList());
+    }
 
 
+    public boolean hayCancionesExplicit(){
 
+        return listaCanciones.stream()
+        .anyMatch(p -> p.isEsExplicit());
+    }
 
-
-
+    public ArrayList<CancionDigital> buscarCancionesPorEtiqueta(String etiqueta){
+        //OJO: FILTER CUANDO QUIERES FILTRAR CANCIONES SEGÚN ALGO DENTRO DE OTRA LISTA
+        //FLATMAP: CUANDO QUIERES SACAR TODOS LOS ELEMENTOS DE UNA LISTA INTERNA
+        return new ArrayList<>(listaCanciones.stream()
+        .filter(p -> p.getEtiquetas().stream().anyMatch(j -> j.equalsIgnoreCase(etiqueta)))
+        .toList());
+    }
 }
