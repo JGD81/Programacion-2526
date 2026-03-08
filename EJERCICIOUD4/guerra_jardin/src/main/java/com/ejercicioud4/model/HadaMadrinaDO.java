@@ -53,7 +53,7 @@ public class HadaMadrinaDO {
     @Override
     public String toString() {
 
-        return "DuendeCombateDO{" +
+        return "HadaMadrinaDO{" +
                 "id=" + idHadaMadrina +
                 ", nombre='" + nombre + '\'' +
                 ", apodoGuerra=" + apodoGuerra +
